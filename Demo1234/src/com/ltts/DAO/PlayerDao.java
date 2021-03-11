@@ -1,6 +1,8 @@
 package com.ltts.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,35 @@ public class PlayerDao {
 		return ps.execute();
 		
 	}
-
+	public List<player> getAllplayers() throws Exception{
+		List<player> li=new ArrayList<player>();
+		Connection mc=MyConnection.getConnection(); // TRanfers control to another 
+		Statement ps=mc.createStatement();
+		ResultSet rs=ps.executeQuery("select * from player");
+		//Player p=new Player();
+		while(rs.next()) {
+			li.add(new player(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getInt(6),rs.getInt(7),rs.getInt(8),rs.getInt(9)));
+			
+		}
+		return li;
+		
+	}public player getplayerById(int id) throws Exception {
+		player p=new player();
+		List<player> li=getAllPlayers();
+		for(player p1:li) {
+			if(p1.getPlayer_id() == id) {
+				p.setPlayer_id(id);
+				p.setName(p1.getName());
+				p.setDateOfBirth(p1.getDateOfBirth());
+				p.setNationality(p1.getNationality());
+				p.setSkills(p1.getSkills());
+				p.setRuns(p1.getRuns());p.setWickets(p1.getWickets());
+				p.setNumber_of_matches(p1.getNumber_of_matches());
+				p.setTeam_id(p1.getTeam_id());
+			}
+		}
+		
+		return p;
+	}
 
 }
